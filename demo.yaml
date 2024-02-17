@@ -1,0 +1,117 @@
+{
+  "name": "SampleVNF",
+  "description": "A demo VNF with some sample data",
+  "internal_connections": [
+    {
+      "name": "internalnet",
+      "description": "Internal network connection",
+      "type": "data",
+      "elements": [
+        {
+          "VNFC": "SampleVM1",
+          "local_iface_name": "eth0"
+        },
+        {
+          "VNFC": "SampleVM2",
+          "local_iface_name": "eth0"
+        }
+      ]
+    }
+  ],
+  "external_connections": [
+    {
+      "name": "control0",
+      "type": "mgmt",
+      "VNFC": "SampleVM1",
+      "local_iface_name": "eth1",
+      "description": "Control interface VM1"
+    },
+    {
+      "name": "control1",
+      "type": "mgmt",
+      "VNFC": "SampleVM2",
+      "local_iface_name": "eth1",
+      "description": "Control interface VM2"
+    },
+    {
+      "name": "in",
+      "type": "data",
+      "VNFC": "SampleVM1",
+      "local_iface_name": "eth2",
+      "description": "Data plane interface input"
+    },
+    {
+      "name": "out",
+      "type": "data",
+      "VNFC": "SampleVM2",
+      "local_iface_name": "eth2",
+      "description": "Data plane interface output"
+    }
+  ],
+  "VNFC": [
+    {
+      "name": "SampleVM1",
+      "description": "Sample VM 1",
+      "VNFC image": "/path/to/sample_image1.qcow2",
+      "disk": 10,
+      "numas": [
+        {
+          "paired-threads": 2,
+          "memory": 2,
+          "interfaces": [
+            {
+              "name": "eth0",
+              "vpci": "0000:00:11.0",
+              "dedicated": "no",
+              "bandwidth": "1 Gbps"
+            },
+            {
+              "name": "eth1",
+              "vpci": "0000:00:12.0",
+              "dedicated": "no",
+              "bandwidth": "1 Gbps"
+            },
+            {
+              "name": "eth2",
+              "vpci": "0000:00:13.0",
+              "dedicated": "no",
+              "bandwidth": "1 Gbps"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SampleVM2",
+      "description": "Sample VM 2",
+      "VNFC image": "/path/to/sample_image2.qcow2",
+      "disk": 10,
+      "numas": [
+        {
+          "paired-threads": 2,
+          "memory": 2,
+          "interfaces": [
+            {
+              "name": "eth0",
+              "vpci": "0000:00:21.0",
+              "dedicated": "no",
+              "bandwidth": "1 Gbps"
+            },
+            {
+              "name": "eth1",
+              "vpci": "0000:00:22.0",
+              "dedicated": "no",
+              "bandwidth": "1 Gbps"
+            },
+            {
+              "name": "eth2",
+              "vpci": "0000:00:23.0",
+              "dedicated": "no",
+              "bandwidth": "1 Gbps"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
