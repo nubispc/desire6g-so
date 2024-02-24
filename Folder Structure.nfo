@@ -1,0 +1,10 @@
+msrv-main/
+│
+├── app.py
+├── models.py
+├── requirements.txt
+├── Dockerfile.msrv-main
+└── messaging/
+    ├── __init__.py
+    ├── rabbitmq.py
+    └── kafka.py
