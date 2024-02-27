@@ -1,5 +1,5 @@
 from kafka import KafkaProducer, KafkaConsumer
-import os
+from kafka.errors import KafkaError
 
 class KafkaMessaging:
     def __init__(self, kafka_bootstrap_servers: str, input_topic: str, final_topic: str):
@@ -10,8 +10,16 @@ class KafkaMessaging:
         self.consumer = KafkaConsumer(self.final_topic, bootstrap_servers=self.kafka_bootstrap_servers)
 
     async def send_message(self, message: bytes):
-        self.producer.send(self.input_topic, message)
+        try:
+            future = self.producer.send(self.input_topic, message)
+            record_metadata = future.get(timeout=10)
+            print("Message sent successfully:", record_metadata)
+        except KafkaError as e:
+            print("Error sending message:", e)
 
     async def receive_message(self):
-        for message in self.consumer:
-            return message.value.decode()
+        try:
+            for message in self.consumer:
+                return message.value.decode()
+        except KafkaError as e:
+            print("Error receiving message:", e)

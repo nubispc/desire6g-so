@@ -1,10 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks
 from fastapi.responses import JSONResponse
-from fastapi import UploadFile, File
-from typing import List, Dict
+from typing import Optional
 import os
 from messaging import get_messaging_system
-from models import TodoItem
 
 app = FastAPI()
 

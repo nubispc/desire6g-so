@@ -1,6 +1,7 @@
 from .rabbitmq import RabbitMQMessaging
 from .kafka import KafkaMessaging
 from typing import Union
+import os
 
 def get_messaging_system() -> Union[RabbitMQMessaging, KafkaMessaging]:
     messaging_system = os.getenv("MESSAGING_SYSTEM", "rabbitmq")
