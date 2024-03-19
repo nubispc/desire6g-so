@@ -1,7 +1,6 @@
 msrv-main/
 │
 ├── app.py
-├── models.py
 ├── requirements.txt
 ├── Dockerfile.msrv-main
 └── messaging/

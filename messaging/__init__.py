@@ -10,7 +10,8 @@ def get_messaging_system() -> Union[RabbitMQMessaging, KafkaMessaging]:
         return RabbitMQMessaging(
             rabbitmq_host=os.getenv("RABBITMQ_HOST", "localhost"),
             input_topic=os.getenv("INPUT_TOPIC", "input_topic"),
-            final_topic=os.getenv("FINAL_TOPIC", "final_topic")
+            final_topic=os.getenv("FINAL_TOPIC", "final_topic"),
+            max_retries = int(os.getenv("RABBITMQ_MAX_RETRIES", 150))
         )
     elif messaging_system == "kafka":
         return KafkaMessaging(

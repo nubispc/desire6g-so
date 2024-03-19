@@ -20,10 +20,11 @@ COPY . /app
 EXPOSE 8000
 
 # Define environment variables
-# Set the RABBITMQ_HOST, INPUT_TOPIC, FINAL_TOPIC, SERVICE_NAME, MESSAGING_SYSTEM, and KAFKA_BOOTSTRAP_SERVERS environment variables
+# Set the RABBITMQ_HOST, INPUT_TOPIC, FINAL_TOPIC, RABBITMQ_MAX_RETRIES (*3 sec), SERVICE_NAME, MESSAGING_SYSTEM, and KAFKA_BOOTSTRAP_SERVERS environment variables
 ENV RABBITMQ_HOST=rabbitmq-service \
     INPUT_TOPIC=input_topic \
     FINAL_TOPIC=final_topic \
+    RABBITMQ_MAX_RETRIES=150 \
     SERVICE_NAME=default_service \
     MESSAGING_SYSTEM=rabbitmq \
     KAFKA_BOOTSTRAP_SERVERS=kafka-service:9092
