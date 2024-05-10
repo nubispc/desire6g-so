@@ -46,6 +46,11 @@ Ensure that the necessary Python dependencies specified in `requirements.txt` ar
     ```
 3. Monitor the logs for messaging activity and errors.
 
+4. Issue a client request:
+    ```
+    curl -X POST -F "item=@demo.yaml" http:/IPADDR:8000/main/
+    ```
+
 ## Folder Structure
 - `app.py`: Main script for the msrv-main service.
 - `requirements.txt`: Specifies the required Python packages.
