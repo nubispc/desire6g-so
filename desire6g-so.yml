@@ -2,14 +2,19 @@ apiVersion: v1
 kind: Service
 metadata:
   creationTimestamp: null
-  name: desire6g-so
+  name: so
+  namespace: desire6g-smo
 spec:
   ports:
   - port: 8000
     protocol: TCP
     targetPort: 8000
+    nodePort: 32008
+
   selector:
-    run: desire6g-so
+    run: so
+  type: NodePort
+
 status:
   loadBalancer: {}
 ---
@@ -18,22 +23,32 @@ kind: Pod
 metadata:
   creationTimestamp: null
   labels:
-    run: desire6g-so
-  name: desire6g-so
+    run: so
+  name: so
+  namespace: desire6g-smo
 spec:
   containers:
-  - image: harbor.nbfc.io/desire6g/desire6g-so
-    name: desire6g-so
+  - image: d6g-smo.netcom.it.uc3m.es/desire6g/desire6g-so:latest
+    name: so
+    imagePullPolicy: Always
     ports:
     - containerPort: 8000
     resources: {}
     env:
       - name: RABBITMQ_HOST
-        value: "rabbitmq"
+        value: "rabbitmq.desire6g-smo"
+      - name: SERVICE_NAME_ID
+        value: "main_id"
       - name: SERVICE_NAME
         value: "main"
       - name: FINAL_TOPIC
-        value: "input_topic"
+        value: "output_topic"
+      - name: SERVICE_CATALOG
+        value: "service-catalog.desire6g-smo"
+      - name: TOPOLOGY_ENDPOINT
+        value: "topology.desire6g-smo"
+      - name: IML_ENDPOINT
+        value: "http://10.5.15.55:5000/iml/yaml/deploy"
   dnsPolicy: ClusterFirst
   restartPolicy: Never
 status: {}
