@@ -1,60 +1,137 @@
-# msrv-main: File Upload and Messaging Middleware
+# DESIRE6G Service Orchestrator
 
 ## Overview
 
-The `msrv-main` application serves as a middleware for handling file uploads and coordinating messaging between different systems. It utilizes FastAPI for handling HTTP requests and provides functionalities for processing file uploads and managing messaging flows.
-
-### Functionality
-
-- **File Upload Handling**: Accepts file uploads via HTTP POST requests and processes them.
-- **Messaging Coordination**: Acts as a mediator for sending and receiving messages between systems such as RabbitMQ.
-- **Asynchronous Processing**: Utilizes asynchronous programming for efficient handling of file uploads and messaging operations.
+The `DESIRE6G` Service Orchestrator serves as a middleware for handling Service deployment and coordinating messages between the various SMO components. It utilizes FastAPI for handling HTTP requests and provides functionalities for processing file uploads and managing messaging flows.
 
 ### Components
 
-- **app.py**: The main script for the `msrv-main` service. It defines the FastAPI endpoints for file upload processing and messaging coordination.
+- **app.py**: The main script for the SO. It defines the FastAPI endpoints for Service Graph registration and forwarding.
 - **messaging/rabbitmq.py**: Module for interacting with RabbitMQ messaging system. It provides methods for sending and receiving messages asynchronously.
 - **requirements.txt**: Specifies the required Python packages for the application.
 
-### Usage
 
-1. **File Upload**: Send a file upload request to the `/service_name/` endpoint using HTTP POST method. The service name can be customized via environment variable (`SERVICE_NAME`).
-2. **Message Processing**: The uploaded file is processed and forwarded to the messaging system for further handling.
-3. **Result Retrieval**: Once processing is complete, the final result message is received from the messaging system and returned as a JSON response.
+### Requirements
+- Python 3.7 or higher
+- FastAPI
+- Requests
 
-### Environment Variables
+#### Installation
 
-- **SERVICE_NAME**: (Optional) Specifies the name of the service. Default is `default_service`.
-- **RABBITMQ_HOST**: Specifies the host address of the RabbitMQ messaging system.
+Clone the repository:
 
-### Deployment
+```bash
+git clone https://github.com/nubispc/desire6g-so
+```
 
-The application can be deployed using Docker. The provided `Dockerfile.msrv-main` sets up a container environment for running the `msrv-main` service. Build the Docker image using `docker build -t msrv-main -f Dockerfile.msrv-main .` and run the container using `docker run -p8000:8000 -it --rm --link rabbitmq-service:rabbitmq-service -e SERVICE_NAME=main msrv-main`.
+#### Install dependencies:
 
-### Dependencies
+```bash
+pip install fastapi requests uvicorn
+```
 
-Ensure that the necessary Python dependencies specified in `requirements.txt` are installed. You can install them using `pip install -r requirements.txt`.
+#### Usage
 
-## Usage
+Run the FastAPI application using uvicorn:
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+### API
+
+The DESIRE6G SO provides endpoints for deploying services, listing deployed services, and retrieving information about deployed services.
+
+#### Endpoints
+
+`POST /default_service/`: Uploads a file and processes it.
+
+`POST /default_service_id/`: Deploys a new service by its ID.
+
+`GET /deployed_services/`: Lists all deployed services.
+
+`GET /deployed_services/{service_id}`: Retrieves information about a deployed service by ID.
+
+
+#### Environment Variables
+
+- `TOPOLOGY_ENDPOINT`: URL of the topology service (default: localhost).
+- `IML_ENDPOINT`: URL of the IML service (default: localhost:5000/iml/yaml/deploy).
+- `SERVICE_NAME`: (Optional) Specifies the name of the service. Default is `default_service`.
+- `SERVICE_NAME_ID`: (Optional) Specifies the name of the service. Default is `default_service`.
+- `RABBITMQ_HOST`: Specifies the host address of the RabbitMQ messaging system.
+
+#### Deployment
+
+Deploy the FastAPI application using Kubernetes:
+
+`kubectl create -f desire6g-so.yml`
+
+### Example Usage
+
+#### Create Site:
+
+```bash
+curl -X 'POST' \
+  'http://localhost:32007/nodes/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "site_id": "desire6g-site",
+  "cpu": 8,
+  "mem": 32,
+  "storage": 1024
+}'
+```
+
+#### Upload Service Graph:
+
+```bash
+curl -X POST -F "file=@demo_nsd.sg.yaml" http://localhost:32006/upload
+```
+
+#### Deploy Service:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"json_data": {"type": "service_graph", "name": "demo_nsd.sg.yaml", "site_id": "desire6g-site"}}' http://localhost:32008/main_id/ | jq
+```
+
+#### Query Deployments:
+
+```bash
+curl http://localhost:32008/deployed_services
+```
+
+Output:
+
+```json
+{"deployed_services":[2]}
+```
+
+#### Get Info on Deployed Service:
+
+```bash
+curl http://localhost:32008/deployed_services/2
+```
+
+Output:
+
+```json
+{"service_name":"2","details":{"status":"deployed","service_name":"Digital Twin Demo","file_name":"demo_nsd.sg.yaml","site_id":"desire6g-site"}}
+```
+
+
+### Container build
+
 1. Build the Docker image:
     ```
-    docker build -t msrv-main -f Dockerfile.msrv-main .
-    ```
-2. Run the Docker container:
-    ```
-    docker run -p8000:8000 -it --rm --link rabbitmq-service:rabbitmq-service -e SERVICE_NAME=main msrv-main
-    ```
-3. Monitor the logs for messaging activity and errors.
-
-4. Issue a client request:
-    ```
-    curl -X POST -F "item=@demo.yaml" http:/IPADDR:8000/main/
+    docker build -t desire6g-so -f Dockerfile .
     ```
 
-## Folder Structure
-- `app.py`: Main script for the msrv-main service.
+### Folder Structure
+- `app.py`: Main script for the SO.
 - `requirements.txt`: Specifies the required Python packages.
-- `Dockerfile.msrv-main`: Dockerfile for building the Docker image.
+- `Dockerfile`: Dockerfile for building the Docker image.
 - `messaging/`: Contains modules for handling messaging with RabbitMQ and Kafka.
     - `__init__.py`: Initialization file for the messaging package.
     - `rabbitmq.py`: Module for interacting with RabbitMQ messaging system.
@@ -62,7 +139,7 @@ Ensure that the necessary Python dependencies specified in `requirements.txt` ar
 
 ### Contributing
 
-Contributions to the `msrv-main` application are welcome! Please feel free to open an issue or submit a pull request for any improvements or features you'd like to add.
+Contributions to the `DESIRE6G` SO are welcome! Please feel free to open an issue or submit a pull request for any improvements or features you'd like to add.
 
 ### License
 

@@ -11,6 +11,7 @@ class RabbitMQMessaging:
         self.channel = None
         self.connection = None
         self.max_retries = max_retries
+        print("input_topic: %s, output_topic:%s, rabbitmqhost=%s " % (input_topic, final_topic, rabbitmq_host))
 
     async def connect(self):
         try:

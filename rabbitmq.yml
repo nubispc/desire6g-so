@@ -3,6 +3,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   name: rabbitmq
+  namespace: desire6g-smo
 spec:
   ports:
   - port: 15672
@@ -25,6 +26,7 @@ metadata:
   labels:
     run: rabbitmq
   name: rabbitmq
+  namespace: desire6g-smo
 spec:
   containers:
   - image: rabbitmq:management
