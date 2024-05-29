@@ -94,6 +94,22 @@ async def service_by_id(item: Item = Body(...)):
         request_states[request_id]["status"] = "failed"
         return JSONResponse(content={"message": "No Message"})
 
+@app.delete(f"/{os.getenv('SERVICE_NAME_ID', 'default_service_id')}/{{service_id}}")
+async def delete_service(service_id: int):
+    if service_id not in deployed_services:
+        raise HTTPException(status_code=404, detail="Service not found")
+
+    # Simulate service deletion process, like making a call to an external service
+    # For example: response = requests.delete(f"{IML_ENDPOINT}/{service_id}")
+    # Assuming the service gets successfully deleted
+
+    response = requests.delete(f"{IML_ENDPOINT}/{service_id}")
+
+    # Remove the service from the deployed_services dictionary
+    del deployed_services[service_id]
+
+    return JSONResponse(content={"message": "Service deleted", "service_id": service_id})
+
 @app.get("/deployed_services")
 async def list_deployed_services():
     return JSONResponse(content={"deployed_services": list(deployed_services.keys())})

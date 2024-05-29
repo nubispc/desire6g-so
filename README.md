@@ -48,7 +48,9 @@ The DESIRE6G SO provides endpoints for deploying services, listing deployed serv
 
 `POST /default_service_id/`: Deploys a new service by its ID.
 
-`GET /deployed_services/`: Lists all deployed services.
+`DELETE /default_service_id/{service_id}`: Deletes service based on the ID returned from the `deployed_services` endpoint.
+
+`GET /deployed_services`: Lists all deployed services.
 
 `GET /deployed_services/{service_id}`: Retrieves information about a deployed service by ID.
 
@@ -117,13 +119,34 @@ curl http://localhost:32008/deployed_services/2
 Output:
 
 ```json
-{"service_name":"2","details":{"status":"deployed","service_name":"Digital Twin Demo","file_name":"demo_nsd.sg.yaml","site_id":"desire6g-site"}}
+{
+  "service_name": "2",
+  "details": {
+    "status": "deployed",
+    "service_name": "Digital Twin Demo",
+    "file_name": "demo_nsd.sg.yaml",
+    "site_id": "desire6g-site"
+  }
+}
 ```
 
+#### Delete deployed service
+
+```bash
+curl http://localhost:320008/main_d/2
+```
+
+Output:
+```json
+{
+  "message": "Service deleted",
+  "service_id": 2
+}
+```
 
 ### Container build
 
-1. Build the Docker image:
+Build the Docker image:
     ```
     docker build -t desire6g-so -f Dockerfile .
     ```

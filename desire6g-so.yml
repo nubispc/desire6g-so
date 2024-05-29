@@ -28,7 +28,7 @@ metadata:
   namespace: desire6g-smo
 spec:
   containers:
-  - image: d6g-smo.netcom.it.uc3m.es/desire6g/desire6g-so:latest
+  - image: d6g-smo.netcom.it.uc3m.es/desire6g/desire6g-so:withdel
     name: so
     imagePullPolicy: Always
     ports:
@@ -48,7 +48,7 @@ spec:
       - name: TOPOLOGY_ENDPOINT
         value: "topology.desire6g-smo"
       - name: IML_ENDPOINT
-        value: "http://10.5.15.55:5000/iml/yaml/deploy"
+        value: "http://10.5.1.21:5000/iml/yaml/deploy"
   dnsPolicy: ClusterFirst
   restartPolicy: Never
 status: {}
